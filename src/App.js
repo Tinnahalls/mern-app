@@ -15,7 +15,8 @@ function App() {
       const data = await response.json(); //we get the json data
       //the data is an array with one item. This item is an object with _id and greeting properties
       //this makes sense since we turned the data into an array in line 20 in server.js and the array is the collection from MongoDB
-      //this collection has only one document and our objet represents the data in that document.
+      //this collection has only one document and our objet represents the data in that document.ll
+      
 
       //now let's get the string from greeting into our greeting state:
       setGreeting(data[0].greeting);
