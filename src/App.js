@@ -1,36 +1,83 @@
-import {useEffect, useState} from 'react';
+import React from 'react'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './App.css'
+
+import { BrowserRouter as Router, Link } from 'react-router-dom'
+
+import { Route as Switch, Route } from 'react-router'
+
+import CreateStudent from './components/create-student.component'
+import EditStudent from './components/edit-student.component'
+import StudentList from './components/student-list.component'
+
 function App() {
-  //useState is a function that returns an array with two items in it.
-  // the first item ( here called greeting ) is the value that you pass as an argument to use state, in this case an empty string ("")
-  // the second item is a function ( here called setGreeting ) that we can use to change the value of the first item ( greeting )
-  // when ever we call this function the App function will be called and the view will be updated with the new value
-  const [greeting, setGreeting] = useState("");
-  
-  //useEffect is a function that takes a function and an array as arguments. The function runs once when the component loads
-  // and then again if any of the state variables in the array are canged. What matters most here is that if you leave the array empty
-  // the code in the function will only run once but not every time we call setGreeting (like the App function).
-  useEffect(()=>{
-    const getGreeting = async()=>{ //to be able to use async and await in useEffect we need to create an async function.
-      const response = await fetch("http://localhost:5000");//we fetch from our api server running on port 5000
-      const data = await response.json(); //we get the json data
-      //the data is an array with one item. This item is an object with _id and greeting properties
-      //this makes sense since we turned the data into an array in line 20 in server.js and the array is the collection from MongoDB
-      //this collection has only one document and our objet represents the data in that document.ll
-      
-
-      //now let's get the string from greeting into our greeting state:
-      setGreeting(data[0].greeting);
-
-      // here we can get more data, and maybe create some fun stuff maybe a adventure game ? 
-    }
-  
-    getGreeting();
-  }, [])
   return (
-    <div>
-      {greeting}
+    <div className="App">
+      <Router>
+        <header className="App-header">
+          <Navbar bg="dark" variant="dark">
+            <Container>
+              <Navbar.Brand>
+                <Link to={'/create-student'} className="nav-link">
+                  React MERN Stack App
+                </Link>
+              </Navbar.Brand>
+
+              <Nav className="justify-content-end">
+                <Nav>
+                  <Link to={'/create-student'} className="nav-link">
+                    Create Student
+                  </Link>
+                </Nav>
+
+                <Nav>
+                  <Link to={'/student-list'} className="nav-link">
+                    Student List
+                  </Link>
+                </Nav>
+              </Nav>
+            </Container>
+          </Navbar>
+        </header>
+
+        <Container>
+          <Row>
+            <Col md={12}>
+              <div className="wrapper">
+                <Switch>
+                  <Route
+                    exact
+                    path="/"
+                    component={(props) => <CreateStudent {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/create-student"
+                    component={(props) => <CreateStudent {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/edit-student/:id"
+                    component={(props) => <EditStudent {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/student-list"
+                    component={(props) => <StudentList {...props} />}
+                  />
+                </Switch>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
